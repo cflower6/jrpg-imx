@@ -1,0 +1,22 @@
+{
+  "name": "jrpg-imx",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@imtbl/sdk": "^1.4.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.8",
+    "vite-plugin-node-polyfills": "^0.19.0"
+  },
+  "dependencies": {
+    "crypto-js": "^4.2.0",
+    "pixi.js": "^7.4.0"
+  }
+}
