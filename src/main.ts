@@ -2,8 +2,6 @@ import {Application, Sprite} from "pixi.js";
 import {config, blockchainData} from "@imtbl/sdk";
 // Secret API key sk_imapik-test-rt2wI1RUE6jBttsn6pRA_e56336
 
-import {config, blockchainData} from '@imtbl/sdk';
-
 export const client = new blockchainData.BlockchainData({
     baseConfig: {
         environment: config.Environment.SANDBOX,
@@ -22,7 +20,7 @@ async function init() {
     const chainName = 'imtbl-zkevm-testnet';
     const contractAddress = '0xd37c51056bac070f330c69262ab96d2ade673a67';
     const response = await client.getNFT({chainName: chainName, contractAddress: contractAddress, tokenId: '1'});
-    console.debug(response);
+    console.log(response);
 
     // append app to our body
     document.body.appendChild(app.view);
