@@ -1,40 +1,37 @@
-import {Application, Sprite} from "pixi.js";
-import {config, blockchainData} from "@imtbl/sdk";
-// Secret API key sk_imapik-test-rt2wI1RUE6jBttsn6pRA_e56336
+import {Application, Texture, Sprite, Container} from "pixi.js";
+import {ImtblCrypto} from "./crypto/ImtblCrypto.ts";
 
-export const client = new blockchainData.BlockchainData({
-    baseConfig: {
-        environment: config.Environment.SANDBOX,
-        apiKey: 'sk_imapik-test-rt2wI1RUE6jBttsn6pRA_e56336',
-    },
-});
 
 /** The PixiJS app Application instance, shared across the project */
 export const app = new Application<HTMLCanvasElement>({
-    width: 640,
-    height: 360
+    resizeTo: window
 });
+const playerContainer = new Container();
+/** Singleton for Immutable x client creation */
+const client = ImtblCrypto.createClient();
+
+//const battleScreen = new BattleScreen();
 
 
 async function init() {
     const chainName = 'imtbl-zkevm-testnet';
     const contractAddress = '0xd37c51056bac070f330c69262ab96d2ade673a67';
-    const response = await client.getNFT({chainName: chainName, contractAddress: contractAddress, tokenId: '1'});
-    console.log(response);
-
+    console.log(await client.getNFT({chainName: chainName, contractAddress: contractAddress, tokenId: '1'}));
     // append app to our body
     document.body.appendChild(app.view);
+    //await battleScreen.createBattleScreen();
+    app.stage.addChild(playerContainer);
 
-    let sprite = Sprite.from('src/sample.png');
-    // add it to stage
-    app.stage.addChild(sprite);
+    const resolvedTexture = Texture.from('./src/ui/assets/BlankPanel-3.png');
+    const playerScreen = Sprite.from(resolvedTexture);
 
-    let elapsed = 0.0;
+    playerScreen.anchor.set(0.5);
 
-    app.ticker.add((delta) => {
-        elapsed += delta;
-        sprite.x = 100.0 + Math.cos(elapsed / 50.0) * 100.0;
-    });
+    playerScreen.x = playerScreen.width / 2;
+    playerScreen.y = playerScreen.height / 2;
+
+    playerContainer.addChild(playerScreen);
+
 }
 
 init();
