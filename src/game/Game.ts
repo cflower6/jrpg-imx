@@ -1,9 +1,9 @@
 // A class that handles all of gameplay based features.
-import {Container, SystemManager} from "pixi.js";
+import {Container} from "pixi.js";
 import {SystemRunner} from "./SystemRunner.ts";
 import {Player} from "./entities/player/Player.ts";
 import {Enemy} from "./entities/enemies/Enemy.ts";
-import {BattleSystem} from "./systems/BattleSystem.ts";
+//import {BattleSystem} from "./systems/BattleSystem.ts";
 import {TurnBasedSystem} from "./systems/TurnBasedSystem.ts";
 
 export class Game {
@@ -37,7 +37,7 @@ export class Game {
     clean up resources
     */
     public init() {
-        this.systems.add(BattleSystem);
+        //this.systems.add(BattleSystem);
         this.systems.add(TurnBasedSystem);
         this.systems.init();
     }

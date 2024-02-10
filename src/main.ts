@@ -1,4 +1,4 @@
-import {Application} from "pixi.js";
+import {Application, BaseTexture, Spritesheet} from "pixi.js";
 import {ImtblCrypto} from "./crypto/ImtblCrypto.ts";
 import {BattleScreen} from "./screens/battle/BattleScreen.ts";
 
@@ -11,6 +11,18 @@ export const app = new Application<HTMLCanvasElement>({
 /** Singleton for Immutable x client creation */
 const client = ImtblCrypto.createClient();
 const battleScreen = new BattleScreen();
+const atlasData = {
+    frames: {},
+    meta: {
+        image: '../src/ui_big_pieces.png',
+        size: {w: 128, h: 32},
+        scale: 1
+    }
+}
+const spritesheet = new Spritesheet(
+    BaseTexture.from(atlasData.meta.image),
+    atlasData
+)
 
 
 async function init() {
@@ -19,7 +31,9 @@ async function init() {
     console.log(await client.getNFT({chainName: chainName, contractAddress: contractAddress, tokenId: '1'}));
     // append app to our body
     document.body.appendChild(app.view);
+    await spritesheet.parse();
     await battleScreen.createBattleScreen();
+    console.log(spritesheet);
 
 }
 

@@ -1,4 +1,4 @@
-import type {Game} from './Game';
+import type {Game} from './Game.ts';
 
 /** Define the structure of a system which can be added to a game. */
 export interface System<S extends Game = Game> {

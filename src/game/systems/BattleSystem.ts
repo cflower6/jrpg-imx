@@ -1,8 +1,7 @@
 import {Player} from "../entities/player/Player.ts";
 import {Enemy} from "../entities/enemies/Enemy.ts";
-import {TurnBasedSystem} from "./TurnBasedSystem.ts";
 import {System} from "../SystemRunner.ts";
-import {Game} from "../Game.ts";
+import type {Game} from '../Game.ts';
 
 export class BattleSystem implements System {
 
@@ -10,28 +9,20 @@ export class BattleSystem implements System {
 
     private readonly _player: Player;
     private readonly _enemy: Enemy;
-    public startTurnSystem: TurnBasedSystem;
     public game!: Game;
-    public signals = {
-        onTurnTaken: new Signal<(isComplete: boolen) => void>(),
-    };
+//    public signals = {
+//        onTurnTaken: new Signal<(isComplete: boolean) => void>(),
+//    };
 
-    constructor(playerState: Player, enemyState: Enemy) {
-        this._player = playerState
-        this._enemy = enemyState;
-        this.startTurnSystem = new TurnBasedSystem();
+    constructor(player: Player, enemy: Enemy) {
+        this._enemy = enemy;
+        this._player = player;
+    }
+
+    init() {
     }
 
     battleState() {
-        do {
-            this.startTurnSystem.init(this._player, this._enemy);
-        } while (this._enemy.isDead || this._player)
-        {
-            // start loop
-            this.signals.onTurnTaken
-            this.startTurnSystem.init(this._player, this._enemy);
-            this.startTurnSystem.turn += 1;
-        }
     }
 
     attack() {
