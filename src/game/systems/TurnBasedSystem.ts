@@ -9,14 +9,31 @@ import {System} from "../SystemRunner.ts";
 import type {Game} from '../Game.ts';
 
 export class TurnBasedSystem implements System {
-    public static SYSTEM_ID = 'turnbased';
-    public turn: number;
+    /**
+     * The instance of the game the system is attached to.
+     * This is automatically set by the system runner when the system is added to the game.
+     */
     public game!: Game;
+    public static SYSTEM_ID = 'turnbased';
+    public turn = 1;
 
     constructor() {
-        this.turn = 1;
     }
 
     public init() {
+        console.log('Turnbased starting up');
+    }
+
+    public start() {
+        this.turn = 1;
+    }
+
+    public waitForTurn() {
+        // on wait for turn disable actions for player
+        //
+    }
+
+    private isEnemyTurn() {
+
     }
 }
