@@ -17,7 +17,10 @@ export enum EnemyState {
  * Enemy is used to determine the action and state of an enemy based on battle factors.
  */
 export class Enemy extends Stats {
+    public isDead: boolean;
+
     constructor(hp: number, atk: number) {
         super(hp, atk);
+        this.isDead = false;
     }
 }

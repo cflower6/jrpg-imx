@@ -13,8 +13,10 @@ export enum PlayerState {
 }
 
 export class Player extends Stats {
+    public isDead: boolean;
 
     constructor(hp: number, atk: number) {
         super(hp, atk);
+        this.isDead = false;
     }
 }
