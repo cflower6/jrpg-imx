@@ -2,7 +2,6 @@ import {Container} from 'pixi.js';
 
 import {app} from './main';
 
-/** Interface for app screens */
 export interface AppScreen<T = any> extends Container {
     prepare?: (data?: T) => void;
     show?: () => Promise<void>;
@@ -33,6 +32,9 @@ class Navigation {
     /** Resize function to avoid problems with scope */
     private currentScreenResize?: () => void;
 
+    /** Default load screen */
+    private loadScreen?: AppScreen;
+
     /** Current overlay being displayed */
     private currentOverlay?: AppScreen;
 
@@ -51,6 +53,14 @@ class Navigation {
     }
 
     /**
+     * Set the default load screen.
+     * @param Ctor - The constructor for the load screen.
+     * */
+    public setLoadScreen(Ctor: AppScreenConstructor) {
+        this.loadScreen = this._getScreen(Ctor);
+    }
+
+    /**
      * Shows an overlay screen overtop of the current screen.
      * @param Ctor - The constructor for the overlay screen.
      * @param data - Data that is to be sent to the overlay.
@@ -58,7 +68,7 @@ class Navigation {
     public async showOverlay<T>(Ctor: AppScreenConstructor, data?: T) {
         // Shows a screen but designates it as an overlay
         // So it is shown above the current screen instead of replaces it
-        await this._showScreen(Ctor, true, data);
+        this._showScreen(Ctor, true, data);
     }
 
     /**
@@ -70,7 +80,7 @@ class Navigation {
     public async goToScreen<T>(Ctor: AppScreenConstructor, data?: T) {
         // Shows a screen but does not designate it as an overlay
         // So it replaces the current screen
-        await this._showScreen(Ctor, false, data);
+        this._showScreen(Ctor, false, data);
     }
 
     /** Hides the current overlay if one is active. */
@@ -175,6 +185,22 @@ class Navigation {
         // If there is a screen already created, hide it
         if (current) {
             await this._removeScreen(current);
+        }
+
+        // Load assets for the new screen, if available
+        if (Ctor.assetBundles && !areBundlesLoaded(Ctor.assetBundles)) {
+            // If assets are not loaded yet, show loading screen, if there is one
+            if (this.loadScreen) {
+                this._addScreen(this.loadScreen, isOverlay);
+            }
+
+            // Load all assets required by this new screen
+            await Assets.loadBundle(Ctor.assetBundles);
+
+            // Hide loading screen, if exists
+            if (this.loadScreen) {
+                this._removeScreen(this.loadScreen, isOverlay);
+            }
         }
 
         // Create the new screen and add to the stage
