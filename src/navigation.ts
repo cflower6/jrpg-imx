@@ -32,9 +32,6 @@ class Navigation {
     /** Resize function to avoid problems with scope */
     private currentScreenResize?: () => void;
 
-    /** Default load screen */
-    private loadScreen?: AppScreen;
-
     /** Current overlay being displayed */
     private currentOverlay?: AppScreen;
 
@@ -50,14 +47,6 @@ class Navigation {
 
     public init() {
         app.stage.addChild(this.screenView, this.overlayView);
-    }
-
-    /**
-     * Set the default load screen.
-     * @param Ctor - The constructor for the load screen.
-     * */
-    public setLoadScreen(Ctor: AppScreenConstructor) {
-        this.loadScreen = this._getScreen(Ctor);
     }
 
     /**
@@ -187,21 +176,6 @@ class Navigation {
             await this._removeScreen(current);
         }
 
-        // Load assets for the new screen, if available
-        if (Ctor.assetBundles && !areBundlesLoaded(Ctor.assetBundles)) {
-            // If assets are not loaded yet, show loading screen, if there is one
-            if (this.loadScreen) {
-                this._addScreen(this.loadScreen, isOverlay);
-            }
-
-            // Load all assets required by this new screen
-            await Assets.loadBundle(Ctor.assetBundles);
-
-            // Hide loading screen, if exists
-            if (this.loadScreen) {
-                this._removeScreen(this.loadScreen, isOverlay);
-            }
-        }
 
         // Create the new screen and add to the stage
         if (isOverlay) {

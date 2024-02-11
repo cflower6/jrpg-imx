@@ -6,6 +6,7 @@ import {AppScreen} from "../../navigation.ts";
 
 
 export class BattleScreen extends Container implements AppScreen {
+    public static SCREEN_ID = 'battle';
     /**Create player battle screen*/
     private readonly playerContainer: Container<DisplayObject>;
     /**Create button container*/

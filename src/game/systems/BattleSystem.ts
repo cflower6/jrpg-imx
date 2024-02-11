@@ -5,8 +5,9 @@ import type {Game} from '../Game.ts';
 import {Player} from "../entities/player/Player.ts";
 import {Enemy} from "../entities/enemies/Enemy.ts";
 import {Signal} from 'typed-signals';
-import {BattleScreen} from "../../screens/battle/BattleScreen.ts";
 import {app} from "../../main.ts";
+import {TurnBasedSystem} from "./TurnBasedSystem.ts";
+import {EnemyAiSystem} from "./EnemyAiSystem.ts";
 
 export class BattleSystem implements System {
     /**
@@ -30,8 +31,6 @@ export class BattleSystem implements System {
     private readonly buttonContainer: Container<DisplayObject>;
     /**Create enemy battle screen*/
     private readonly enemyContainer: Container<DisplayObject>;
-    /**BattleSystem initialized*/
-    private battleSystem!: BattleSystem;
 
     private startX = 16;
     private startY = 40;
@@ -57,25 +56,24 @@ export class BattleSystem implements System {
         this.buttonContainer = new Container<DisplayObject>();
         this.player = new Player(10, 3);
         this.enemy = new Enemy(10, 3);
-        this.createBattleScreen();
     }
 
     public async init() {
+        await this.createBattleScreen();
+        this.game.gameContainer.addChild(...[this.playerContainer, this.enemyContainer, this.buttonContainer]);
     }
 
     //onStart load up enemy and enmyAi
     public start() {
+
     }
 
-    public battleState() {
-    }
+    public update(delta: number) {
 
-    public attack() {
-        //this._enemy.hp -= this._player.atk;
     }
 
     /**This is here to build the battlescreen for player vs enemy*/
-    public async createBattleScreen() {
+    private async createBattleScreen() {
         await this._createPlayerScreen();
         await this._createPlayerButton();
         await this._createEnemyScreen();
@@ -86,6 +84,14 @@ export class BattleSystem implements System {
 
     /**Helper to create Player Container*/
     private async _createPlayerScreen() {
+        this.startX = 16;
+        this.startY = 40;
+
+        this.midStartX = 478;
+        this.midStartY = 23;
+
+        this.revStartX = 478;
+        this.revStartY = 80;
 
         this.playerContainer.x = app.screen.width / 10;
         this.playerContainer.y = app.screen.height / 8;
@@ -211,6 +217,15 @@ export class BattleSystem implements System {
     private async _createEnemyScreen() {
         this.enemyContainer.x = app.screen.width / 1.8;
         this.enemyContainer.y = app.screen.height / 8;
+
+        this.enemyStartX = 16;
+        this.enemyStartY = 40;
+
+        this.midEnemyStartX = 478;
+        this.midEnemyStartY = 23;
+
+        this.revEnemyStartX = 478;
+        this.revEnemyStartY = 80;
         /**Setting the first asset to screen*/
         const texture = new Texture(await Assets.load('../src/ui_big_pieces.png'));
         texture.frame = new Rectangle(this.enemyStartX, this.enemyStartY, 31, 32);
@@ -330,7 +345,7 @@ export class BattleSystem implements System {
             lineJoin: 'round',
         });
 
-        const richText = new Text('Enemy HP: ' + this.battleSystem?.enemy?.hp, style);
+        const richText = new Text('Enemy HP: ' + this.enemy.hp, style);
 
         richText.x = 0;
         richText.y = 0;
@@ -381,7 +396,20 @@ export class BattleSystem implements System {
                 }
             },
         });
-        button.onPress.connect(() => console.log('onPress'));
+        button.onPress.connect(() => {
+            this.enemy.hp -= this.player.atk;
+            console.log(this.enemy.hp);
+
+//            if (action == 'attack') {
+//                this.player.hp -= this.enemy.atk;
+//            }
+            if (this.enemy.hp <= 0) {
+                console.log('WON THE FIGHT');
+                this.enemy.hp = this.enemy.maxHp;
+            }
+            this._createEnemyScreen();
+        });
+        //const action = this.game.systems.get(TurnBasedSystem).onTurnComplete(this.player, this.enemy);
         this.buttonContainer.addChild(button);
     }
 }

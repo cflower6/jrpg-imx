@@ -1,0 +1,46 @@
+{
+  "hash": "8caf3827",
+  "configHash": "2934cb2c",
+  "lockfileHash": "7df04feb",
+  "browserHash": "11e618f2",
+  "optimized": {
+    "pixi.js": {
+      "src": "../../node_modules/pixi.js/lib/index.mjs",
+      "file": "pixi__js.js",
+      "fileHash": "74140da1",
+      "needsInterop": false
+    },
+    "@imtbl/sdk": {
+      "src": "../../node_modules/@imtbl/sdk/dist/index.js",
+      "file": "@imtbl_sdk.js",
+      "fileHash": "f271dd84",
+      "needsInterop": false
+    },
+    "@pixi/ui": {
+      "src": "../../node_modules/@pixi/ui/lib/index.mjs",
+      "file": "@pixi_ui.js",
+      "fileHash": "6fe5860a",
+      "needsInterop": false
+    },
+    "typed-signals": {
+      "src": "../../node_modules/typed-signals/dist/index.js",
+      "file": "typed-signals.js",
+      "fileHash": "95a5fd38",
+      "needsInterop": true
+    }
+  },
+  "chunks": {
+    "chunk-TARWKFOR": {
+      "file": "chunk-TARWKFOR.js"
+    },
+    "chunk-CW6YSS5F": {
+      "file": "chunk-CW6YSS5F.js"
+    },
+    "chunk-KCVEYFH5": {
+      "file": "chunk-KCVEYFH5.js"
+    },
+    "chunk-WGAPYIUP": {
+      "file": "chunk-WGAPYIUP.js"
+    }
+  }
+}

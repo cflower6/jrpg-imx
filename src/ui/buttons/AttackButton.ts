@@ -48,8 +48,6 @@ export class AttackButton extends FancyButton {
             // Anchor to the center-bottom
             anchorX: 0.5,
             anchorY: 1,
-            // Set initial scale to default scale
-            scale: DEFAULT_SCALE,
             // Allow custom button options to overwrite predefined options
             ...options.buttonOptions,
         });
